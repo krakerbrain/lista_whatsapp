@@ -59,8 +59,9 @@ const withOutSession = () => {
 const listenMessage = () => {
   client.on("message", (msg) => {
     try {
-      const { from, to, body, author } = msg;
-      saveHistorial(from, author);
+      const { from, to, body, author, type } = msg;
+
+      saveHistorial(from, author, type);
     } catch (error) {
       console.log(error);
     }
@@ -75,27 +76,32 @@ const sendMessage = (to, message) => {
   });
 };
 
-const saveHistorial = async (number) => {
+const saveHistorial = async (from, number, type) => {
   //se obtiene el numero de telefono en formato de 9 numeros
   let numeroPicker = number.slice(2, 11);
 
   //se obtiene un array de objetos con el nombre del picker desde la base de datos
   let nombre = await getUser(numeroPicker);
-
+  console.log(nombre, numeroPicker);
   //se guarda en la variable "picker" el string del nombre del picker
   let picker = nombre[0].nombre;
 
   //location contiene el numero que identifica a los grupos de whatsapp
-  const grupoWhatsappID = number.slice(12, 22);
+  const grupoWhatsappID = from.slice(12, 22);
 
   //pathChat crea el archivo excel que contendra la lista de usuarios
-  const pathChat = `./chats/ubicaciones.xlsx`;
+  //const pathChat = "./chats/ubicaciones.xlsx";
+  const pathChat = "c:/Users/Mario/Google Drive/ubicaciones.xlsx";
 
   const workbook = new ExcelJS.Workbook();
   const today = moment().format("DD-MM-YYYY hh:mm");
+  const diaMes = moment().format("DD-MM");
 
-  //solo si el numero contiene el identificacor "grupoWhatsappID" se almacena en la hoja de excel
-  if (grupoWhatsappID == 1626627314) {
+  //solo si el numero contiene el identificacor "grupoWhatsappID" y el tipo de mensaje
+  //es desconocido el usuario se guarda en la hoja de excel
+  // (esto porque lo que queremos almacenar es un usuario que envíe su ubicacion en tiempo real)
+
+  if (grupoWhatsappID == 1626627314 && type == "unknown") {
     if (fs.existsSync(pathChat)) {
       workbook.xlsx.readFile(pathChat).then(() => {
         const worksheet = workbook.getWorksheet(1);
@@ -114,7 +120,7 @@ const saveHistorial = async (number) => {
           });
       });
     } else {
-      const worksheet = workbook.addWorksheet("Chats");
+      const worksheet = workbook.addWorksheet(diaMes);
       worksheet.columns = [
         { header: "Fecha", key: "date" },
         { header: "Mensaje", key: "picker" },
