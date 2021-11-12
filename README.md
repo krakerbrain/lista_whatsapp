@@ -1,7 +1,7 @@
 # Lista de usuarios whatsapp
 
-- Se está desarrollando una app que cree una lista de excel
-  a partir del envío de mensajes con la ubicación en tiempo real
+- Se está desarrollando una app que almacena en una hoja de excel,
+  una lista de usuarios a partir del envío de mensajes con la ubicación en tiempo real.
 
 ## Usando las librerías:
 
