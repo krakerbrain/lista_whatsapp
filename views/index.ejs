@@ -1,0 +1,43 @@
+<%- include ('partials/_header.ejs') -%>
+
+
+
+    <div class="container">
+      
+        <div class="row">
+          <div class="col-12">
+            <h1 class="py-4">Lista de retiro de pedidos</h1>
+            <table class="table table-bordered">
+
+              <thead>
+                <tr>
+                  <th scope="col">Posición</th>
+                  <th scope="col">Seleccionado</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (var i=0; i < newPicker.length; i++){ %>
+                <tr>
+                    <td><%= i + 1 %></td>
+                  <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck<%= i + 1 %>">
+                        <label class="custom-control-label" for="customCheck<%= i + 1 %>"></label>
+                    </div>
+                  </td>
+                  <td><%= newPicker[i].nombre %></td>
+                  <td><%= newPicker[i].fecha %></td>
+                </tr>
+                <% } %>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+
+<%- include ('partials/_footer.ejs') -%>
