@@ -12,9 +12,13 @@ const app = express();
 //importing routes
 const indexRoutes = require("./routes/index");
 
-//settings
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+// //settings
+// app.set("views", path.join(__dirname, "views"));
+// app.set("view engine", "ejs");
+const publicPath = path.resolve(__dirname, "./public");
+const port = process.env.PORT || 3000;
+
+app.use(express.static(publicPath));
 
 //routes
 app.use("/", indexRoutes);
@@ -24,10 +28,6 @@ const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-});
 
 //whatsapp Session
 const SESSION_FILE_PATH = "./session.json";
@@ -45,6 +45,7 @@ const withSession = () => {
   client.on("ready", () => {
     listenMessage();
     console.log("Client is ready");
+    server.listen(port, () => console.log(`Connected on port ${port}`));
   });
 
   client.on("auth_failure", () => {
@@ -93,29 +94,32 @@ const sendMessage = (to, message) => {
   });
 };
 
-const pickerLoaded = fs.readFileSync("pickers.json", "utf-8");
+const pickerLoaded = fs.readFileSync("./public/pickers.json", "utf-8");
 let newPicker = JSON.parse(pickerLoaded);
+
+io.on("connection", (socket) => {
+  // server-side
+  io.on("connection", (socket) => {
+    socket.emit("hello", newPicker);
+  });
+});
 
 const saveHistorial = async (from, number, type) => {
   try {
     //se obtiene el numero de telefono en formato de 9 numeros
-    let numeroPicker = number.slice(2, 11);
-
+    //let numeroPicker = number.slice(2, 11);
+    let numeroPicker = from.slice(2, 11);
+    console.log(numeroPicker);
     //se obtiene un array de objetos con el nombre del picker desde la base de datos
-    let nombre = await getUser(numeroPicker);
+    //let nombre = await getUser(numeroPicker);
 
     //se guarda en la variable "picker" el string del nombre del picker
-    let picker = nombre[0].nombre;
+    //let picker = nombre[0].nombre;
 
     //location contiene el numero que identifica a los grupos de whatsapp
-    const grupoWhatsappID = from.slice(12, 22);
-
-    //pathChat crea el archivo excel que contendra la lista de usuarios
-    //const pathChat = "./chats/ubicaciones.xlsx";
-    const pathChat = "c:/Users/Mario/Google Drive/ubicaciones.xlsx";
+    //const grupoWhatsappID = from.slice(12, 22);
 
     const today = moment().format("DD-MM-YYYY hh:mm");
-    const diaMes = moment().format("DD-MM");
 
     //solo si el numero contiene el identificacor "grupoWhatsappID" y el tipo de mensaje
     //es desconocido el usuario se guarda en la hoja de excel
@@ -125,12 +129,12 @@ const saveHistorial = async (from, number, type) => {
 
     let pickerTurno = {
       fecha: today,
-      nombre: picker,
+      nombre: numeroPicker,
     };
 
     newPicker.push(pickerTurno);
     const jsonPicker = JSON.stringify(newPicker);
-    fs.writeFileSync("pickers.json", jsonPicker, "utf-8");
+    fs.writeFileSync("./public/pickers.json", jsonPicker, "utf-8");
   } catch (error) {
     console.log("Nombre no existe en la base de datos", {
       number,
@@ -140,4 +144,3 @@ const saveHistorial = async (from, number, type) => {
 };
 
 fs.existsSync(SESSION_FILE_PATH) ? withSession() : withOutSession();
-server.listen(3000, () => console.log("Connected on port 3000"));
