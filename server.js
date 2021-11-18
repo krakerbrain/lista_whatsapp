@@ -107,34 +107,34 @@ io.on("connection", (socket) => {
 const saveHistorial = async (from, number, type) => {
   try {
     //se obtiene el numero de telefono en formato de 9 numeros
-    //let numeroPicker = number.slice(2, 11);
-    let numeroPicker = from.slice(2, 11);
+    let numeroPicker = number.slice(2, 11);
+    //let numeroPicker = from.slice(2, 11);
     console.log(numeroPicker);
     //se obtiene un array de objetos con el nombre del picker desde la base de datos
-    //let nombre = await getUser(numeroPicker);
+    let nombre = await getUser(numeroPicker);
 
     //se guarda en la variable "picker" el string del nombre del picker
-    //let picker = nombre[0].nombre;
+    let picker = nombre[0].nombre;
 
     //location contiene el numero que identifica a los grupos de whatsapp
-    //const grupoWhatsappID = from.slice(12, 22);
+    const grupoWhatsappID = from.slice(12, 22);
 
     const today = moment().format("DD-MM-YYYY hh:mm");
 
     //solo si el numero contiene el identificacor "grupoWhatsappID" y el tipo de mensaje
     //es desconocido el usuario se guarda en la hoja de excel
     // (esto porque lo que queremos almacenar es un usuario que envíe su ubicacion en tiempo real)
-
     //if (grupoWhatsappID == 1626627314) {
-
     let pickerTurno = {
       fecha: today,
-      nombre: numeroPicker,
+      nombre: picker,
+      numero: numeroPicker,
     };
 
     newPicker.push(pickerTurno);
     const jsonPicker = JSON.stringify(newPicker);
     fs.writeFileSync("./public/pickers.json", jsonPicker, "utf-8");
+    // }
   } catch (error) {
     console.log("Nombre no existe en la base de datos", {
       number,

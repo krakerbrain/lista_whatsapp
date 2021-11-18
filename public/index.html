@@ -11,17 +11,24 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
     <div class="container">
-      <div class="d-flex justify-content-between bg-light p-4 sticky-top">
-        <h1>Index sin ejs</h1>
-        <button id="carga_ajax" class="btn btn-danger">Actualizar</button>
+      <div class="sticky-top bg-light">
+        <div>
+          <h1 class="py-4">Index sin ejs</h1>
+        </div>
+        <div class="p-2">
+          <button id="carga_ajax" class="btn btn-danger mr-2">Actualizar</button>
+          <button id="carga_ajax" class="btn btn-primary">Subir</button>
+        </div>
       </div>
       <table class="table">
         <thead>
           <tr>
             <th scope="col">#</th>
+            <th scope="col"></th>
             <th scope="col">fecha</th>
             <th scope="col">nombre</th>
           </tr>

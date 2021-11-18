@@ -32,23 +32,35 @@ var loading = document.getElementById("lblNuevoTicket");
 
 var boton = document.getElementById("carga_ajax");
 
-boton.addEventListener("click", function () {
+window.onload = () => {
+  actualizarData();
+};
+
+boton.addEventListener("click", () => {
+  actualizarData();
+});
+
+const actualizarData = () => {
   axios
-    .get("pickers.json")
-    .then(function (res) {
-      if (res.status == 200) {
-        res.data.forEach((element, i) => {
+    .get("./pickers.json")
+    .then((data) => {
+      if (data.status == 200) {
+        pickers = data.data;
+        loading.innerHTML = "";
+        pickers.forEach((element, i) => {
           console.log(loading);
           loading.innerHTML += `<tr>
           <th scope="row">${i + 1}</th>
+          <td><input type="checkbox" name="myTextEditBox" value="checked" 
+          style="margin-left:auto; margin-right:auto;"></td>
           <td>${element.fecha}</td>
-          <td>${element.nombre}</td>
+          <td><div>${element.nombre}</div><small class="text-muted">${element.numero}</small></td>
         </tr>`;
         });
       }
-      console.log(res);
+      console.log(data);
     })
-    .catch(function (err) {
+    .catch(function (data) {
       loading.innerText = "Error de conexión " + err;
     });
-});
+};

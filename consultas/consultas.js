@@ -10,4 +10,13 @@ const getUser = async (number) => {
   }
 };
 
-module.exports = { getUser };
+const cambioStatus = async (id, estado) => {
+  const result = await pool.query(`UPDATE skaters SET estado = ${estado} WHERE id = ${id} RETURNING *;`);
+  const usuario = result.rows[0];
+  return usuario;
+};
+
+module.exports = {
+  getUser,
+  cambioStatus,
+};
