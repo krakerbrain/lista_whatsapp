@@ -7,3 +7,12 @@ CREATE TABLE pickers (
     telefono INT,
     nombre VARCHAR(30)
 );
+
+CREATE TABLE lista (
+    id SERIAL ,
+    fecha TIMESTAMP default current_timestamp,
+    telefono_lista INT PRIMARY KEY,
+    nombre VARCHAR(30),
+    estado BOOLEAN,
+    FOREIGN KEY (telefono_lista) REFERENCES pickers(telefono)
+);

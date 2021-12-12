@@ -2,41 +2,26 @@
 
 
 
-    <div class="container">
-      
-        <div class="row">
-          <div class="col-12">
-            <h1 class="py-4">Lista de retiro de pedidos</h1>
-            <table class="table table-bordered">
-
-              <thead>
-                <tr>
-                  <th scope="col">Posición</th>
-                  <th scope="col">Seleccionado</th>
-                  <th scope="col">Nombre</th>
-                  <th scope="col">Fecha</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% for (var i=0; i < newPicker.length; i++){ %>
-                <tr>
-                    <td><%= i + 1 %></td>
-                  <td>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="customCheck<%= i + 1 %>">
-                        <label class="custom-control-label" for="customCheck<%= i + 1 %>"></label>
-                    </div>
-                  </td>
-                  <td><%= newPicker[i].nombre %></td>
-                  <td><%= newPicker[i].fecha %></td>
-                </tr>
-                <% } %>
-              </tbody>
-
-            </table>
-          </div>
-        </div>
+<div class="container">
+  <h2 class="text-center py-5">Turnos Boosmap Jumbo Viña</h2>
+  <div class="row justify-content-center">
+    <div class="card col-md-3 m-5">
+      <img src="./assets/admin.jpg" class="card-img-top p-3" style="max-width: 100%; width: auto; height: auto" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">Administrador</h5>
+        <a href="/admin" class="btn btn-warning">ENTRAR</a>
       </div>
+    </div>
+
+    <div class="card col-md-3 m-5">
+      <img src="./assets/driver.jpg" class="card-img-top p-3" style="max-width: 100%; width: auto; height: auto" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">Picker</h5>
+        <a href="/user" class="btn btn-danger">ENTRAR</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
