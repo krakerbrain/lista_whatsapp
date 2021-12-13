@@ -4,7 +4,7 @@ CREATE DATABASE boosmap;
 
 CREATE TABLE pickers (
     id SERIAL PRIMARY KEY,
-    telefono INT,
+    telefono INT UNIQUE,
     nombre VARCHAR(30)
 );
 

@@ -1,14 +1,13 @@
-const fs = require("fs");
 const express = require("express");
 const router = express.Router();
-const { getList } = require("../consultas/consultas");
-const { cambioStatus } = require("../consultas/consultas");
-
-const picker = fs.readFileSync("./public/pickers.json", "utf-8");
-let newPicker = JSON.parse(picker);
+const { getList, getListAdmin, cambioStatus, agregaChofer } = require("../consultas/consultas");
 
 router.get("/", (req, res) => {
   res.render("index");
+});
+
+router.get("/agregar", (req, res) => {
+  res.render("newUser");
 });
 
 router.get("/user", async (req, res) => {
@@ -17,8 +16,18 @@ router.get("/user", async (req, res) => {
     usuarios,
   });
 });
+
+router.post("/agregar", async (req, res) => {
+  const { telefono, nombre } = req.body;
+  await agregaChofer(telefono, nombre);
+  const usuarios = await getListAdmin();
+  res.render("admin", {
+    usuarios,
+  });
+});
+
 router.get("/admin", async (req, res) => {
-  const usuarios = await getList();
+  const usuarios = await getListAdmin();
   res.render("admin", {
     usuarios,
   });
@@ -31,6 +40,5 @@ router.put("/status:user", async (req, res) => {
     usuarios,
   });
 });
-//router.put("/admin", changeStatus);
 
 module.exports = router;

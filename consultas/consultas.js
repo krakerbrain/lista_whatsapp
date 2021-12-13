@@ -10,10 +10,23 @@ const getName = async (number) => {
   }
 };
 
-const addPicker = async (telefono_lista, nombre) => {
+const agregaTurno = async (telefono_lista, nombre) => {
   const consulta = {
     text: `INSERT INTO lista (telefono_lista, nombre, estado) VALUES ($1,$2, FALSE) RETURNING *;`,
     values: [telefono_lista, nombre],
+  };
+  try {
+    const result = await pool.query(consulta);
+    return result.rows;
+  } catch (error) {
+    return error;
+  }
+};
+
+const agregaChofer = async (telefono, nombre) => {
+  const consulta = {
+    text: `INSERT INTO pickers (telefono, nombre) VALUES ($1,$2) RETURNING *;`,
+    values: [telefono, nombre],
   };
   try {
     const result = await pool.query(consulta);
@@ -31,6 +44,14 @@ const getList = async () => {
     return error;
   }
 };
+const getListAdmin = async () => {
+  try {
+    const result = await pool.query("SELECT * FROM lista  WHERE estado = false ORDER BY fecha");
+    return result.rows;
+  } catch (error) {
+    return error;
+  }
+};
 
 const cambioStatus = async (id) => {
   const result = await pool.query(`UPDATE lista SET estado = true WHERE id = ${id} RETURNING *;`);
@@ -40,7 +61,9 @@ const cambioStatus = async (id) => {
 
 module.exports = {
   getName,
-  addPicker,
+  agregaTurno,
+  agregaChofer,
   getList,
   cambioStatus,
+  getListAdmin,
 };

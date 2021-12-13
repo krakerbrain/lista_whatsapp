@@ -4,10 +4,12 @@ const path = require("path");
 const { Client } = require("whatsapp-web.js");
 const chalk = require("chalk");
 const moment = require("moment");
-const { getName, addPicker, cambioStatus } = require("./consultas/consultas");
+const { getName, agregaTurno } = require("./consultas/consultas");
 const express = require("express");
-const { json } = require("express");
+
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 //importing routes
 const indexRoutes = require("./routes/index");
@@ -88,7 +90,6 @@ const sendMessage = (to, message) => {
 };
 
 const saveHistorial = async (from, number, type) => {
-  console.log(type);
   try {
     //se obtiene el numero de telefono en formato de 9 numeros
     let numeroPicker = number.slice(2, 11);
@@ -101,12 +102,11 @@ const saveHistorial = async (from, number, type) => {
 
     //location contiene el numero que identifica a los grupos de whatsapp
     const grupoWhatsappID = from.slice(12, 22);
-
     //solo si el numero contiene el identificador "grupoWhatsappID" y el tipo de mensaje
     //es desconocido el usuario se guarda en la hoja de excel
     // (esto porque lo que queremos almacenar es un usuario que envíe su ubicacion en tiempo real)
-    if (grupoWhatsappID == 1626627314) {
-      await addPicker(numeroPicker, picker);
+    if (grupoWhatsappID == 1626627314 && type == "location") {
+      await agregaTurno(numeroPicker, picker);
     }
   } catch (error) {
     console.log("Nombre no existe en la base de datos", {
@@ -115,24 +115,5 @@ const saveHistorial = async (from, number, type) => {
     });
   }
 };
-/*
-//Permite cambiar el estatus del usuario
-const changeStatus = async (req, res) => {
-  console.log("Check");
-  // const { id, estado } = req.body;
-  // console.log(id, estado);
-  // try {
-  //   const usuario = await cambioStatus(id, estado);
-  //   res.status(200).send(JSON.stringify(usuario));
-  // } catch (error) {
-  //   res.status(500).send({
-  //     error: `Algo salio mal ${error}`,
-  //     code: 500,
-  //   });
-  // }
-};
 
-module.exports = {
-  //changeStatus,
-};*/
 fs.existsSync(SESSION_FILE_PATH) ? withSession() : withOutSession();

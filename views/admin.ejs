@@ -1,4 +1,3 @@
-
 <%- include ('partials/_header.ejs') -%>
 <div class="container">
   <div class="sticky-top bg-light">
@@ -7,8 +6,7 @@
     </div>
     <div class="p-2">
       <a href="/admin"><button class="btn btn-danger mr-2">Actualizar</button></a>
-      <a href="#"></a>
-      
+      <a href="/agregar"><button class="btn btn-primary mr-2">Agregar booster</button></a>
     </div>
   </div>
   <table class="table">
@@ -21,22 +19,18 @@
       </tr>
     </thead>
     <tbody>
-     
       <% for (var i=0; i < usuarios.length; i++){ %>
         <% let fechaUser = usuarios[i].fecha.toLocaleDateString() %>
         <% let horaUser = usuarios[i].fecha.toLocaleTimeString() %>
           <% let today = new Date().toLocaleDateString()%>
  
-    
-            
-              <tr>
+          <% if(fechaUser == today && horaUser > '08:00:00'){%>
+              <tr id = "<%= usuarios[i].id %>">
                 <td><%= i+1 %></td>
-                <td><input type="checkbox" onclick="changeStatus('<%= usuarios[i].id %>')"></td>
+                <td><input type="checkbox"  onclick="changeStatus('<%= usuarios[i].id %>')"></td>
                 <td><%= usuarios[i].fecha.toLocaleDateString() %> <%= usuarios[i].fecha.toLocaleTimeString() %></td>
                 <td><div><%= usuarios[i].nombre %></div><small class="text-secondary"><%=usuarios[i].telefono_lista%></small></td>
-              
               </tr>
-              <% if(fechaUser == today && horaUser > '08:00:00'){%>
           <% } %>
       <% } %>
     </tbody>

@@ -22,7 +22,7 @@
                     <% let fechaUser = usuarios[i].fecha.toLocaleDateString() %>
                     <% let horaUser = usuarios[i].fecha.toLocaleTimeString() %>
                     <% let today = new Date().toLocaleDateString()%>
-                  
+                    <% if(fechaUser == today && horaUser > '08:00:00'){%> 
                             <tr>
                                 <td><%= i+1 %></td>
                                     <% if(usuarios[i].estado){ %>
@@ -33,7 +33,7 @@
                                   <td><%= usuarios[i].fecha.toLocaleDateString() %> <%= usuarios[i].fecha.toLocaleTimeString() %></td>
                                 <td><div><%= usuarios[i].nombre %></div><small class="text-secondary"><%=usuarios[i].telefono_lista%></small></td>
                             </tr>
-                            <% if(fechaUser == today && horaUser > '08:00:00'){%> 
+                            
                         <% } %>
                 <% } %>
             </tbody>
